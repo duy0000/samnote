@@ -118,7 +118,7 @@ const UserPanel = () => {
             </Box>
             <Button
               variant="contained"
-              className="bg-red-500 w-full rounded-full"
+              className="bg-red-500 w-full rounded-full mt-4"
               onClick={() => {
                 const submit = confirm("Do you want to logout?");
                 if (submit) {

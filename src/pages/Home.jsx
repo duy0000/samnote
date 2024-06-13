@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from "react";
-import { handleLogOut } from "../helper";
+// import React from "react";
+// import { handleLogOut } from "../helper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CloudIcon from "@mui/icons-material/Cloud";
@@ -93,6 +93,7 @@ const Home = () => {
     try {
       const res = await axios(`https://samnote.mangasocial.online/numbernote`);
       setInformation(res.data.data);
+      console.log(res.data.data);
     } catch (err) {
       console.log(err);
     } finally {
