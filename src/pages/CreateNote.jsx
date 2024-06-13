@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Editor } from "@tinymce/tinymce-react";
 
 import { useState, useContext, useEffect } from "react";
 import {
@@ -18,40 +19,34 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import api from "../api";
 import { AppContext } from "../context";
+import { format } from "date-fns";
 
 const types = ["Text", "CheckList"];
-const notePublicOptions = ["public", "Not-public"];
+const notePublicOptions = ["Private", "public"];
 const CreateNote = () => {
   const [type, setType] = useState("Text");
-  const [data, setData] = useState("");
+  // const [data, setData] = useState("");
   const [title, setTitle] = useState("");
   const [idFolder, setIdFolder] = useState("");
-  const [dueAt, setDueAt] = useState(null);
+  const [dueAt] = useState(null);
   const [pinned, setPinned] = useState(false);
   const [lock, setLock] = useState("");
   const [remindAt, setRemindAt] = useState(null);
   // const [linkNoteShare, setLinkNoteShare] = useState("");
+  const [data, setData] = useState(null);
+
+  const handleEditorChange = (data, editor) => {
+    setData(data);
+  };
+
   const linkNoteShare = null;
   const [notePublic, setNotePublic] = useState(0);
-  const [color, setColor] = useState({ r: "241", g: "112", b: "19", a: "1" });
+  const [color, setColor] = useState({ r: "255", g: "255", b: "255", a: "1" });
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [folder, setUserFolder] = useState(null);
   const appContext = useContext(AppContext);
   const { user, setSnackbar } = appContext;
-
-  // const demoSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const response = await axios.post(
-  //     "https://samnote.mangasocial.online/folder/77",
-  //     {
-  //       nameFolder: "tesst 111111",
-  //       idUser: 58,
-  //     }
-  //   );
-
-  //   console.log(response.data);
-  // };
-
+  const outputDate = format(new Date(remindAt), "d/M/yyyy HH:mm a '+07:00'");
   useEffect(() => {
     let ignore = false;
     const getUserFolder = async () => {
@@ -115,11 +110,11 @@ const CreateNote = () => {
       dueAt: dueAt ? dueAt.toISOString() : null,
       pinned,
       lock,
-      remindAt: remindAt ? remindAt.toISOString() : null,
-      linkNoteShare,
+      remindAt: outputDate ? outputDate : null,
+      linkNoteShare: "",
       notePublic,
     };
-
+    console.log(payload);
     try {
       await api.post(`/notes/${user.id}`, payload);
       setSnackbar({
@@ -141,17 +136,25 @@ const CreateNote = () => {
   // Có hợp có tan chẳng bất ngờ
   // Nhưng sao ta vẫn không quên được
   // Để mãi bây giờ lại làm thơ
-
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return (
     <>
       {" "}
-      <Box className="max-w mx-auto mt-5">
-        {/* <RemoveIcon
-          className="absolute top-4 right-5 p-1 cursor-pointer  hover:text-red-500"
-          onClick={() => {}}
-        /> */}
-        <Box className="grid grid-cols-3 gap-4">
-          <FormControl>
+      <Box className="max-w mx-auto mt-3">
+        <Box className="flex justify-between ">
+          {" "}
+          <h2 className="ml-2 mb-4 uppercase">create note</h2>
+          <Button
+            className="mt-2 mb-5 mr-4"
+            variant="contained"
+            onClick={handleSubmit}
+          >
+            Create
+          </Button>
+        </Box>
+
+        <Box className="flex flex-wrap">
+          <FormControl className="w-full md:w-1/3 lg:w-1/4 xl:w-1/4 mx-4 my-2">
             <InputLabel id="demo-simple-select-label">Type</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -168,23 +171,15 @@ const CreateNote = () => {
               ))}
             </Select>
           </FormControl>
-          {/* {type === "Text" ? (
-            <TextField
-              label="Data"
-              size="small"
-              value={data}
-              onChange={(e) => setData(e.target.value)}
-            />
-          ) : (
-            <>checklist</>
-          )} */}
           <TextField
+            className="w-full md:w-1/3 lg:w-1/4 xl:w-1/4 mx-4 my-2"
             label="Title"
             size="small"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
           <div
+            className="w-full md:w-1/3 lg:w-1/4 xl:w-1/4 mx-4 my-2"
             style={{
               padding: "5px",
               background: "#fff",
@@ -201,6 +196,7 @@ const CreateNote = () => {
               style={{
                 width: "36px",
                 height: "100%",
+                border: "0.1px solid black",
                 marginLeft: "5px",
                 borderRadius: "2px",
                 background: ` rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`,
@@ -211,7 +207,8 @@ const CreateNote = () => {
             <div
               style={{
                 position: "absolute",
-                zIndex: "2",
+                right: "0px",
+                zIndex: "50",
               }}
             >
               <div
@@ -227,67 +224,36 @@ const CreateNote = () => {
               <SketchPicker color={color} onChange={handleChange} />
             </div>
           ) : null}
-          {/* <TextField
-          label="idFolder"
-          size="small"
-          type="number"
-          value={idFolder}
-          onChange={(e) => setIdFolder(e.target.value)}
-        /> */}
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">Folder</InputLabel>
+
+          <FormControl className="w-full md:w-1/3 lg:w-1/4 xl:w-1/4 mx-4 my-2">
+            <InputLabel id="demo-simple-select-folder">Folder</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
+              label="folder"
+              size="small"
+              labelId="demo-simple-select-folder"
               id="demo-simple-select"
               value={idFolder}
-              label="Folder"
               onChange={(e) => setIdFolder(e.target.value)}
             >
               {folder &&
                 folder.map((data, index) => (
-                  <MenuItem key={index} value={data.idFolder}>
-                    {data.idFolder}----{data.nameFolder}
+                  <MenuItem key={index} value={data.id}>
+                    {data.nameFolder}
                   </MenuItem>
                 ))}
             </Select>
           </FormControl>
 
-          <DatePicker
-            selected={dueAt}
-            onChange={(date) => setDueAt(date)}
-            showTimeSelect
-            dateFormat="Pp"
-          />
-          <FormControlLabel
-            label="Pinned"
-            control={
-              <Checkbox
-                checked={pinned}
-                onChange={(e) => setPinned(e.target.checked)}
-              />
-            }
-          />
           <TextField
+            className="w-full md:w-1/3 lg:w-1/4 xl:w-1/4 mx-4 my-2"
             label="Lock"
             size="small"
             type="password"
             value={lock}
             onChange={(e) => setLock(e.target.value)}
           />
-          <DatePicker
-            selected={remindAt}
-            onChange={(date) => setRemindAt(date)}
-            showTimeSelect
-            dateFormat="Pp"
-          />
 
-          {/* <TextField
-            label="LinkNoteShare"
-            size="small"
-            value={linkNoteShare}
-            onChange={(e) => setLinkNoteShare(e.target.value)}
-          /> */}
-          <FormControl>
+          <FormControl className="w-full md:w-1/3 lg:w-1/4 xl:w-1/4 mx-4 my-2">
             <InputLabel id="demo-simple-select-label">Note Public</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -303,14 +269,46 @@ const CreateNote = () => {
               ))}
             </Select>
           </FormControl>
-          <Button variant="contained" onClick={handleSubmit}>
-            Submit
-          </Button>
+          <Box className="flex items-center w-full md:w-1/3 lg:w-1/4 xl:w-1/4 z-50 mx-4 my-2">
+            <h6>RemindAt:</h6>{" "}
+            <DatePicker
+              selected={remindAt}
+              onChange={(date) => setRemindAt(date)}
+              showTimeSelect
+              dateFormat="Pp"
+            />
+          </Box>
+          <FormControlLabel
+            className="w-full md:w-1/3 lg:w-1/4 xl:w-1/4  mx-4 my-2"
+            label="Pinned"
+            control={
+              <Checkbox
+                checked={pinned}
+                onChange={(e) => setPinned(e.target.checked)}
+              />
+            }
+          />
+          <Box className="w-full">
+            <h5 className="ml-2">Content</h5>
+            <div>
+              <Editor
+                apiKey="c9fpvuqin9s9m9702haau5pyi6k0t0zj29nelhczdvjdbt3y"
+                initialValue="<p>Write content here</p>"
+                init={{
+                  height: "100vh",
+                  menubar: true,
+                  statusbar: false,
+                  toolbar:
+                    "undo redo | formatselect | bold italic backcolor | \
+          alignleft aligncenter alignright alignjustify | \
+          bullist numlist outdent indent | removeformat ",
+                }}
+                onEditorChange={handleEditorChange}
+              />
+            </div>
+          </Box>
         </Box>
       </Box>
-      {/* <form onSubmit={demoSubmit}>
-        <button>submit</button>
-      </form> */}
     </>
   );
 };

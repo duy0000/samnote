@@ -14,7 +14,7 @@ import AndroidIcon from "@mui/icons-material/Android";
 import { Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ClearIcon from "@mui/icons-material/Clear";
-import { styled } from "@mui/styles";
+import styled from '@emotion/styled';
 import Avatar from "@mui/material/Avatar";
 import "../App.css";
 import "../bootstrap.css";

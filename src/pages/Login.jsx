@@ -1,6 +1,13 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
-
+import AppleIcon from "@mui/icons-material/Apple";
+import AndroidIcon from "@mui/icons-material/Android";
+import DownloadIcon from '@mui/icons-material/Download';
+import { InputAdornment, IconButton, Snackbar, Alert } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import {
   Box,
   Button,
@@ -24,10 +31,10 @@ const styleModal = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 500,
   bgcolor: "background.paper",
   boxShadow: 24,
-  p: 6,
+  p: 5,
 };
 
 const LOGIN = 1;
@@ -36,19 +43,19 @@ const FORGOT_PASSWORD = 3;
 const RESET_PASSWORD = 4;
 
 const Login = () => {
-  const [content, setContent] = useState(1);
-
+  const [content, setContent] = useState(LOGIN);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-
   const [registerName, setRegisterName] = useState("");
   const [registerGmail, setRegisterGmail] = useState("");
   const [registerUsername, setRegisterUsername] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
-
   const [forgotPassword, setForgotPassword] = useState("");
-
   const [openModal, setOpenModal] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar
+
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -75,6 +82,13 @@ const Login = () => {
             className="w-full rounded-full"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             label="Password"
@@ -83,76 +97,113 @@ const Login = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
           />
-
           <Button
             variant="contained"
             size="large"
             className="bg-[#5BE260] w-full text-center text-black"
             onClick={handleLogin}
+            style={{ textTransform: 'none', fontWeight: 'bold' }}
           >
-            login
+            Login
           </Button>
           <Button
             variant="contained"
-            className="bg-[#CBCDCF] w-full text-[#08174E]"
+            className="bg-[#0E0F131C] w-full text-[#08174E]"
             onClick={() => (handleShowForgotPassword(), setOpenModal(true))}
+            style={{ textTransform: 'none', fontWeight: 'bold' }}
           >
-            i forgot my password
+            I forgot my password
           </Button>
         </>
       );
     }
+
     if (content === REGISTER) {
       return (
         <>
-          <Typography variant="h3">Create Account</Typography>
+          <Typography variant="h4" style={{ fontSize: '40px', fontWeight: 'bold' }}>Create Account</Typography>
           <TextField
-            label="Name"
+            label="User name"
             variant="outlined"
             className="w-full rounded-full"
             value={registerName}
             onChange={(e) => setRegisterName(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PersonOutlineOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
-            label="Gmail"
+            label="Email address"
             variant="outlined"
             className="w-full"
             type="email"
             value={registerGmail}
-            onChange={(e) => {
-              setRegisterGmail(e.target.value);
+            onChange={(e) => setRegisterGmail(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailOutlinedIcon />
+                </InputAdornment>
+              ),
             }}
           />
           <TextField
-            label="Username"
+            label="User name"
             variant="outlined"
             className="w-full"
             value={registerUsername}
-            onChange={(e) => setRegisterUsername(e.currentTarget.value)}
+            onChange={(e) => setRegisterUsername(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
-            label="Password"
+            label="Confirm Password"
             variant="outlined"
             className="w-full"
             type="password"
             value={registerPassword}
             onChange={(e) => setRegisterPassword(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
           />
           <Button
             variant="contained"
             size="large"
             className="bg-[#5BE260] w-full text-center text-black"
             onClick={handleRegister}
+            style={{ textTransform: 'none', fontWeight: 'bold' }}
           >
-            register
+            Register
           </Button>
           <Button
             variant="contained"
             className="bg-[#CBCDCF] w-full text-[#08174E]"
             onClick={handleShowLogin}
+            style={{ textTransform: 'none', fontWeight: 'bold' }}
           >
-            i already have an account
+            I already have an account
           </Button>
         </>
       );
@@ -161,45 +212,106 @@ const Login = () => {
     if (content === FORGOT_PASSWORD) {
       return (
         <>
-          <Typography variant="h4">Forgot Your Password ?</Typography>
+          <Typography variant="h3" style={{ fontSize: '30px', fontWeight: 'bold' }}>Forgot Your Password?</Typography>
           <Typography>
             Please enter your email below and we will send you a password reset
             via email.
           </Typography>
           <TextField
-            label="Email address "
+            label="Email address"
             variant="outlined"
             className="w-full rounded-full"
             type="email"
             value={forgotPassword}
             onChange={(e) => setForgotPassword(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
           />
-
           <Button
             variant="contained"
             size="large"
             className="bg-[#5BE260] w-full text-center text-black"
             onClick={handleForgotPassword}
+            style={{ textTransform: 'none', fontWeight: 'bold' }}
           >
-            submit
+            Submit
+          </Button>
+        </>
+      );
+    }
+    
+    if (content === RESET_PASSWORD) {
+      return (
+        <>
+          <Typography variant="h4" style={{ fontSize: '30px', fontWeight: 'bold' }}>Reset Your Password</Typography>
+          <Typography>Please type in your new password below.</Typography>
+          <TextField
+            label="New password"
+            variant="outlined"
+            className="w-full rounded-full"
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            label="Confirm new password"
+            variant="outlined"
+            className="w-full rounded-full"
+            type="password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button
+            variant="contained"
+            size="large"
+            className="bg-[#5BE260] w-full text-center text-black"
+            onClick={handleResetPassword}
+            style={{ textTransform: 'none', fontWeight: 'bold' }}
+          >
+            Submit
           </Button>
         </>
       );
     }
   };
+
+  const handleShowRegister = () => {
+    setContent(REGISTER);
+    setOpenModal(true);
+  };
+
   const handleShowLogin = () => {
     setContent(LOGIN);
     setOpenModal(true);
   };
 
-  const handleShowRegister = () => {
-    setContent(REGISTER);
-
+  const handleShowForgotPassword = () => {
+    setContent(FORGOT_PASSWORD);
     setOpenModal(true);
   };
 
-  const handleShowForgotPassword = () => {
-    setContent(FORGOT_PASSWORD);
+  const handleShowResetPassword = () => {
+    setContent(RESET_PASSWORD);
+    setOpenModal(true);
   };
 
   const handleRegister = () => {
@@ -216,7 +328,7 @@ const Login = () => {
     console.log(payload);
     const createAccount = async () => {
       try {
-        await api.post(`https://samnote.mangasocial.online/register `, payload);
+        await api.post(`https://samnote.mangasocial.online/register`, payload);
         setOpenDialog(true);
       } catch (err) {
         console.log(err);
@@ -248,42 +360,67 @@ const Login = () => {
         await api.post(`/resetPasswork`, {
           gmail: forgotPassword,
         });
+        setForgotPassword("");
+        setSnackbarOpen(true); // Hiển thị Snackbar khi thành công
       } catch (err) {
         console.log(err);
       }
-      console.log(JSON.stringify(forgotPassword));
     };
     forgotPass();
   };
 
+  const handleResetPassword = () => {
+    const resetPassword = async () => {
+      try {
+        await api.patch(`/resetPasswork/change`, {
+          new_password: newPassword,
+          confirm_new_password: confirmNewPassword,
+        });
+        setNewPassword("");
+        setConfirmNewPassword("");
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    resetPassword();
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+    handleShowResetPassword(); // Chuyển sang trang Reset Password sau khi đóng Snackbar
+  };
+
   return (
     <Box className="h-screen w-screen bg-[url(/loginBackground.png)] bg-cover">
-      <Box className="flex flex-col gap-12 top-0 left-0 w-full h-full  justify-center items-center text-center">
+      <Box className="flex flex-col gap-12 top-0 left-0 w-full h-full justify-center items-center text-center">
         <Box className="flex items-center gap-4">
-          <img src="/public/logo.png" alt="" className="w-[120px] h-[102px]" />
-
-          <Typography className="uppercase font-bold text-white text-[128px]">
+          <img src="/public/logo.png" alt="" className="w-[80px] h-[70px]" style={{marginTop: '-10px'}} />
+          <Typography className="uppercase font-bold text-white text-[70px]" style={{ marginTop: '-10px' }}>
             samnotes
           </Typography>
         </Box>
-        <Typography className="text-5xl text-white">
+        <Typography className="text-3xl text-white" style={{ margin: '-30px' }}>
           A place to store and share your ideas. Anytime, anywhere.
         </Typography>
         <Box className="flex gap-12 justify-center">
           <Button
             variant="contained"
-            className="w-[495px] h-[111px] bg-[#5BE260] text-5xl text-black rounded-[30px]"
+            className="w-[330px] h-[60px] bg-[#5BE260] text-2xl text-black rounded-[20px]"
             onClick={handleShowRegister}
+            style={{ textTransform: 'none', fontWeight: 'bold' }}
           >
-            Get Started
+            Get started
           </Button>
-
           <Button
             variant="contained"
-            className="w-[495px] h-[111px] text-5xl bg-[#DADADA] text-black rounded-[30px]"
+            className="w-[330px] h-[60px] text-2xl bg-[#DADADA] text-black rounded-[20px]"
             onClick={handleShowLogin}
+            style={{ textTransform: 'none', fontWeight: 'bold' }}
           >
-            login
+            Login
           </Button>
           <Modal
             open={openModal}
@@ -298,7 +435,6 @@ const Login = () => {
                 className="absolute top-4 right-5 p-2 cursor-pointer text-zinc-500 hover:text-black"
                 onClick={handleCloseModal}
               />
-
               {renderContent()}
             </Box>
           </Modal>
@@ -322,6 +458,7 @@ const Login = () => {
                   variant="contained"
                   onClick={() => (handleCloseDialog(), setContent(LOGIN))}
                   className="bg-[#5BE260] text-black flex-1"
+                  style={{ textTransform: 'none' }}
                 >
                   Login
                 </Button>
@@ -329,14 +466,50 @@ const Login = () => {
                   variant="contained"
                   onClick={handleCloseDialog}
                   className="text-black bg-[#DADADA] flex-1"
+                  style={{ textTransform: 'none', color: '' }}
                 >
-                  resend confirmation mail
+                  Resend confirmation mail
                 </Button>
               </Box>
             </DialogActions>
           </Dialog>
         </Box>
+        <Box className="fixed bottom-0 left-0 p-4 flex items-center gap-4">
+          <img src="/public/logo.png" alt="" className="w-[80px] h-[70px]" />
+          <Typography className=" font-bold text-white text-[20px]">
+            Now available on IOS and Android platform. Download now
+          </Typography>
+          <Box className="ApleDownload">
+            <div>
+              <AppleIcon style={{ color: 'white', fontSize: '32px' }} />
+            </div>
+            <div>
+              <a href="">
+                <DownloadIcon style={{ color: 'white', fontSize: '32px' }} />
+              </a>
+            </div>
+          </Box>
+          <Box className="AndroidDownload">
+            <div>
+              <AndroidIcon style={{ color: 'white', fontSize: '32px' }} />
+            </div>
+            <div>
+              <a href="">
+                <DownloadIcon style={{ color: 'white', fontSize: '32px' }} />
+              </a>
+            </div>
+          </Box>
+        </Box>
       </Box>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          Password reset email sent!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
