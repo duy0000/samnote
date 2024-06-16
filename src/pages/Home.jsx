@@ -100,6 +100,7 @@ const Home = () => {
       setLoading(false);
     }
   };
+  
 
   const getLastPublicNote = async () => {
     try {
