@@ -37,7 +37,7 @@
     "react-konva": "^18.2.10",
     "react-markdown": "^9.0.1",
     "react-paginate": "^8.2.0",
-    "react-router-dom": "^6.23.1",
+    "react-router-dom": "^6.26.2",
     "react-slick": "^0.30.2",
     "react-text-truncate": "^0.19.0",
     "rehype-raw": "^7.0.0",
