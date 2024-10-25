@@ -29,7 +29,7 @@
     "moment": "^2.30.1",
     "quill": "^2.0.2",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.10.4",
+    "react-bootstrap": "^2.10.5",
     "react-checklist": "^1.0.12",
     "react-color": "^2.19.3",
     "react-datepicker": "^6.9.0",
