@@ -50,7 +50,7 @@
     "socket.io-client": "^4.7.5",
     "sweetalert2": "^11.14.1",
     "swiper": "^11.1.4",
-    "tinymce": "^7.1.2",
+    "tinymce": "^7.4.1",
     "uniqid": "^5.4.0",
     "vite-plugin-node-polyfills": "^0.22.0",
     "websocket": "^1.0.35"
