@@ -109,6 +109,8 @@ export const convertTimeMessage = (time) => moment(`${time}+0700`).calendar()
 
 // ** color
 export const isLightColor = (colorObj) => {
+ if (!colorObj) return true
+ 
  const luminance = getLuminance(
   `rgb(${colorObj.r}, ${colorObj.g}, ${colorObj.b})`
  )

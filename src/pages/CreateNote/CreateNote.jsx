@@ -69,6 +69,14 @@ const CreateNote = () => {
 
  const postNote = (data) => {
   fetchApiSamenote('post', `/notes/${user?.id}`, data).then((data) => {
+   if (data?.error) {
+    return setSnackbar({
+     isOpen: true,
+     message: `${data?.error}`,
+     severity: 'error',
+    })
+   }
+
    reset()
    setDataContent({
     isError: false,
@@ -83,8 +91,6 @@ const CreateNote = () => {
     message: `Create note success!`,
     severity: 'success',
    })
-
-   console.log('data', data)
 
    setUploadImageList([])
    // post image list

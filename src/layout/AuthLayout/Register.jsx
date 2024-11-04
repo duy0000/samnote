@@ -142,8 +142,8 @@ const Register = () => {
     setIsCreateAccount(true)
     return setSnackbar({
      isOpen: true,
-     message: response.error,
-     severity: 'error',
+     message: response.message,
+     severity: 'success',
     })
    }
   })

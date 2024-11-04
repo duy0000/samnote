@@ -54,7 +54,7 @@ export const schemaNoteCreate = Joi.object({
   'date.greater': 'Greater current date now',
   'date.empty': 'Not content yet!',
  }),
- remindAt: Joi.date().min('now').allow(null).messages({
+ remindAt: Joi.date().min('now').required().messages({
   'date.min': 'Min Current date',
  }),
 

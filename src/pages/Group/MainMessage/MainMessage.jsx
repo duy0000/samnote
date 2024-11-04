@@ -15,7 +15,6 @@ import MessageChatCard from './components/MessageChatCard'
 import MessageComponent from './components/MessageComponent'
 import MessageGroupCard from './components/MessageGroupCard'
 import InfoMessageTop from './InfoMessageTop'
-import { fetchAllMessageList } from '../fetchApiGroup'
 
 const MainMessage = (props) => {
  const { typeFilterChat, getAllMessageList } = props
@@ -98,7 +97,24 @@ const MainMessage = (props) => {
    }
   )
 
+ const roomSplit = (idUser, idOther) =>
+  idUser > idOther ? `${idOther}#${idUser}` : `${idUser}#${idOther}`
+
  // handle socket
+
+ useEffect(() => {
+  if (!socket) return
+
+  socket.on('chat_strangers', (data) => {
+   console.log('relation', data)
+   if (data.message.relation) {
+    const { idReceive, idSend } = data.message
+
+    // join room chat
+    socket.emit('join_room', { room: roomSplit(idSend, idReceive) })
+   }
+  })
+ }, [socket])
 
  useEffect(() => {
   if (!socket) return
@@ -189,8 +205,6 @@ const MainMessage = (props) => {
    })
 
    //join room chat
-   const roomSplit = (idUser, idOther) =>
-    idUser > idOther ? `${idOther}#${idUser}` : `${idUser}#${idOther}`
    socket && socket.emit('join_room', { room: roomSplit(user?.id, id) })
   }
 
@@ -260,7 +274,6 @@ const MainMessage = (props) => {
  useEffect(() => {
   scrollViewRef?.current.scrollIntoView()
  }, [messagesChat, messagesGroup])
-
 
  return (
   <div className='col-md-8 col-xl-9 w-full px-0 flex flex-col relative overflow-x-hidden'>

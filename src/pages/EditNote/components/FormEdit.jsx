@@ -107,10 +107,15 @@ const FormEdit = (props) => {
   setValue('title', noteId[0].title)
   setValue('pinned', noteId[0].pinned)
   setValue('type', noteId[0].type)
-  setValue('dueAt', convertApiToTime(noteId[0].dueAt))
-  setValue('remindAt', convertApiToTime(noteId[0].remindAt))
   setValue('notePublic', noteId[0].notePublic)
   setValue('idFolder', noteId[0].idFolder)
+
+  if (noteId[0].remindAt) {
+    setValue('remindAt', convertApiToTime(noteId[0].remindAt))
+  }
+  if (noteId[0].dueAt) {
+    setValue('dueAt', convertApiToTime(noteId[0].dueAt))
+  }
 
   if (noteId[0].type === 'text') {
    setDataContent((prev) => ({

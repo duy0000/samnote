@@ -1,11 +1,10 @@
 import { Box } from '@mui/material'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'swiper/css'
 import api from '../../api'
-import { AppContext } from '../../context'
 import Loading from '../../share/Loading'
 import './UserProfile.css'
 
@@ -17,8 +16,6 @@ import {
 } from './components'
 
 const UserProfile = () => {
-    const appContext = useContext(AppContext)
-    const { user } = appContext
     const [userInfomations, setUserInformations] = useState(null)
 
     const [reload, setReload] = useState(0)

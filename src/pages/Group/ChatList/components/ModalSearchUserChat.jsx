@@ -56,8 +56,12 @@ const ModalSearchUserChat = ({ showModalSearch, setShowModalSearch }) => {
   if (!otherUserID) return
 
   const roomID = roomSplit(user?.id, otherUserID)
+
+  // join room
   socket.emit('join_room', { room: roomID })
-  postRelation(user?.id, otherUserID)
+  // set relationship true
+  socket.emit('chat_strangers', { idSend: user?.id, idReceive: otherUserID })
+  // postRelation(user?.id, otherUserID)
 
   setShowModalSearch(false)
 
