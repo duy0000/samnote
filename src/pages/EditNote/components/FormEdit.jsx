@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useContext, useEffect, useState } from 'react'
-import { useParams, Link, useSearchParams } from 'react-router-dom'
+import { useParams, Link, useSearchParams, useNavigate } from 'react-router-dom'
 
 import { AppContext } from '../../../context'
 import { joiResolver } from '@hookform/resolvers/joi'
@@ -46,6 +46,10 @@ const FormEdit = (props) => {
  const currentPage = searchParams.get('page')
 
  const [noteItem, setNoteItem] = useState({})
+
+ const navigate = useNavigate()
+
+ console.log('noteItem', noteItem)
 
  const [checklist, setChecklist] = useState([])
  const [dataContent, setDataContent] = useState({
@@ -494,9 +498,9 @@ const FormEdit = (props) => {
      />
 
      <div>
-      <button type='button' className='btn btn-primary w-max'>
+      <Link className='btn btn-primary w-max' to={noteItem.linkNoteShare}>
        Share Note
-      </button>
+      </Link>
      </div>
 
      {typeForm === 'text' && (
