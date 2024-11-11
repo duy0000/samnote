@@ -213,7 +213,10 @@ const FormNote = ({
     </div>
 
     {errors.remindAt && (
-     <p style={{ borderBottom: '1px solid red' }} className='text-red-600 md:text-[16px] text-sm mt-1'>
+     <p
+      style={{ borderBottom: '1px solid red' }}
+      className='text-red-600 md:text-[16px] text-sm mt-1'
+     >
       {errors.remindAt.message}
      </p>
     )}
@@ -231,7 +234,10 @@ const FormNote = ({
     </div>
 
     {errors.dueAt && (
-     <p style={{ borderBottom: '1px solid red' }} className='text-red-600 md:text-[16px] text-sm mt-1'>
+     <p
+      style={{ borderBottom: '1px solid red' }}
+      className='text-red-600 md:text-[16px] text-sm mt-1'
+     >
       {errors.dueAt.message}
      </p>
     )}

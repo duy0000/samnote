@@ -125,8 +125,6 @@ const CreateNote = () => {
    setDataContent((prev) => ({ ...prev, isError: false, message: '' }))
  }, [textEditor, checklist.length])
 
- console.log('errors', errors)
-
  const onSubmit = async (data) => {
   // set errors when text empty
   if (typeForm === 'text') {

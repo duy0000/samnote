@@ -59,6 +59,14 @@ const SketchBar = ({
   <>
    <div className='md:max-w-[200px] max-w-[150px] md:aspect-[1/2] hidden xsm:flex flex-col flex-grow-1 bg-[#618EA9] px-md-2 px-1 overflow-y-auto style-scrollbar-y style-scrollbar-y-sm'>
     <div className='px-md-2 px-1 flex flex-col gap-2 mb-3'>
+     <button
+      onClick={handleSaveCanvas}
+      type='button'
+      className='bg-red-600 opacity-90 duration-150 ease-out hover:opacity-100 text-white w-max mx-auto py-1 px-3 mt-2 rounded-md xl:text-xl md:text-lg text-[14px]'
+     >
+      Save
+     </button>
+
      <div className='flex justify-between'>
       <button onClick={handleUndoClick} type='button'>
        <Undo />
@@ -139,14 +147,6 @@ const SketchBar = ({
       </li>
      ))}
     </ul>
-
-    <button
-     onClick={handleSaveCanvas}
-     type='button'
-     className='bg-red-600 opacity-90 duration-150 ease-out hover:opacity-100 text-white w-max mx-auto py-1 px-3 my-2 rounded-md xl:text-xl md:text-lg text-[14px]'
-    >
-     Save
-    </button>
    </div>
 
    <div className='xsm:hidden grid grid-cols-2 gap-2 p-2 bg-[#618EA9]'>

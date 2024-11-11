@@ -17,6 +17,8 @@ const Group = () => {
   window.localStorage.getItem('typeFilterChat') || 'All'
  )
 
+ console.log('allMessageList', allMessageList)
+
  const handleChangeTypeFilterChat = (type) => setTypeFilterChat(type)
 
  //______________________________________
@@ -26,6 +28,9 @@ const Group = () => {
    user.id,
    typeFilterLocal || typeFilterChat
   )
+
+  console.log('messageList', messageList)
+
   setAllMessageList(messageList)
  }
 

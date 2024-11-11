@@ -29,12 +29,14 @@ import {
 } from '@mui/material'
 
 import AddIcon from '@mui/icons-material/Add'
+import LinkIcon from '@mui/icons-material/Link'
 
 import configs from '../../../configs/configs.json'
 import ModalCreateFolder from '../../../share/ModalCreateFolder'
 import TextEditor from '../../../share/TextEditor'
 import AddImages from './AddImages'
 import ChecklistNote from '../../../share/ChecklistNote'
+import { Modal } from 'react-bootstrap'
 const { API_SERVER_URL } = configs
 
 const FormEdit = (props) => {
@@ -48,8 +50,6 @@ const FormEdit = (props) => {
  const [noteItem, setNoteItem] = useState({})
 
  const navigate = useNavigate()
-
- console.log('noteItem', noteItem)
 
  const [checklist, setChecklist] = useState([])
  const [dataContent, setDataContent] = useState({
@@ -293,6 +293,7 @@ const FormEdit = (props) => {
  const [showModalFolder, setShowModalFolder] = useState(false)
  const handleShowModalFolder = () => setShowModalFolder(true)
 
+ const [showModalShareNote, setShowModalShareNote] = useState(false)
  return (
   <div className='p-2 bg-[#3A3F42] rounded-lg flex flex-col flex-grow-1'>
    <Link
@@ -497,11 +498,46 @@ const FormEdit = (props) => {
       }
      />
 
-     <div>
-      <Link className='btn btn-primary w-max' to={noteItem.linkNoteShare}>
-       Share Note
-      </Link>
-     </div>
+     {notePublicForm === 1 && id && (
+      <div>
+       <button
+        type='button'
+        onClick={() => setShowModalShareNote(true)}
+        className='btn btn-primary w-max'
+       >
+        Share Note
+       </button>
+      </div>
+     )}
+
+     <Modal
+      centered
+      show={showModalShareNote}
+      onHide={() => setShowModalShareNote(false)}
+      size='sm'
+     >
+      <div className='bg-slate-600 flex justify-center items-center rounded-lg'>
+       <button
+        type='button'
+        onClick={() => {
+         navigator.clipboard
+          .writeText(`${window.location.origin}/share-note/${noteItem.idNote}`)
+          .then(() => {
+           setSnackbar({
+            isOpen: true,
+            message: `Link copied`,
+            severity: 'success',
+           })
+
+           setShowModalShareNote(false)
+          })
+        }}
+        title='Copy link'
+       >
+        <LinkIcon className='text-white text-[60px]' />
+       </button>
+      </div>
+     </Modal>
 
      {typeForm === 'text' && (
       <AddImages

@@ -29,6 +29,7 @@ import {
 
 import UserSetting from './pages/Setting/UserSetting'
 import MainMessage from './pages/Group/MainMessage/MainMessage'
+import ShareNote from './pages/ShareNote/ShareNote'
 
 const AppSnackbar = () => {
  const appContext = useContext(AppContext)
@@ -87,6 +88,8 @@ function App() {
 
     <Route path='/' exact element={<Home />} />
     <Route path='*' element={<Navigate replace to='/' />} />
+
+    <Route path='/share-note/:id' element={<ShareNote />} />
 
     <Route element={<RootLayout />}>
      <Route path='/incognito'>

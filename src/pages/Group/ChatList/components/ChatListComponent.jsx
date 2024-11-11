@@ -1,7 +1,7 @@
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
 
 const ChatListComponent = ({ data, renderItem }) => {
- return data.length === 0 ? (
+ return data?.length === 0 ? (
   <div className='text-center'>
    <div>
     <ChatBubbleOutlineIcon className='text-[80px]' />
